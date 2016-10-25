@@ -1,0 +1,30 @@
+// 1. Create a collection named orders.
+db.createCollection('orders')
+
+// 2. Insert at least 3 documents that represent an order. IMPORTANT: See section below for fields.
+db.orders.insert({orderDate: new Date('2011-02-15'), orderTotal: 502.43, lineItems: {productName: "towels", unitPrice: 20, quantity: 2}})
+db.orders.insert({orderDate: new Date('2016-02-15'), orderTotal: 232.22, lineItems: {productName: "beard wax", unitPrice: 14, quantity: 300}})
+db.orders.insert({orderDate: new Date('2016-05-15'), orderTotal: 221.21, lineItems: {productName: "car", unitPrice: 20000, quantity: 501}})
+
+// 3. Find a single order document, any order document.
+db.orders.find({"lineItems.productName": "car"})
+
+// 4. Find all orders and make them look pretty.
+db.orders.find().pretty()
+
+// 5. Find all orders with an orderDate that is prior to 1/1/2016.
+db.orders.find({orderDate: {$lt: new Date('2016-01-01')}}).pretty()
+
+// 6. Find all orders with an orderDate that is after 1/1/2016.
+db.orders.find({orderDate: {$gt: new Date('2016-01-01')}}).pretty()
+
+// 7. Find orders with lineItems that have a quantity that is less than 50, but greater than 5. HINT: Look at $and and dot notation.
+db.orders.find({"lineItems.quantity": {$lt: 50, $gt: 5}}).pretty()
+or
+db.orders.find({$and: [{"lineItems.quantity": {$lt: 50}}, {"lineItems.quantity": {$gt: 5}}]})
+
+// 8. Update one of your line items to 42.99. HINT: Look at dot notation
+db.orders.update({"lineItems.productName": "beard wax"}, {$set: {"lineItems.unitPrice": 42.99}})
+
+// 9. Remove one of your orders.
+db.orders.remove({"lineItems.productName": "car"})
